@@ -6,7 +6,7 @@
 /*   By: dasimoes <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 22:05:03 by dasimoes          #+#    #+#             */
-/*   Updated: 2025/07/18 22:05:04 by dasimoes         ###   ########.fr       */
+/*   Updated: 2025/07/19 16:08:02 by dasimoes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_strlen(char *str)
 {
-	int size;
+	int	size;
 
 	size = 0;
 	while (str[size])
@@ -24,13 +24,19 @@ int	ft_strlen(char *str)
 
 char	*ft_strjoin(char *s1, char *s2)
 {
-	int	i;
-	int	j;
-	int	size;
+	int		i;
+	int		j;
+	int		size;
 	char	*result;
 
 	i = 0;
 	j = 0;
+	if (!s1 && !s2)
+		return (NULL);
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (ft_strdup(s1));
 	size = (ft_strlen(s1) + ft_strlen(s2) + 1);
 	result = (char *)malloc(size * sizeof(char));
 	if (!result)
@@ -38,7 +44,42 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s1[i])
 		result[i] = s1[i++];
 	while (s2[j])
-		result[i +j] = s2[j++];
+		result[i + j] = s2[j++];
 	result[size - 1] = '\0';
 	return (result);
+}
+
+char	*ft_strdup(char *str)
+{
+	int		i;
+	int		size;
+	char	*dup;
+
+	i = 0;
+	if (!str)
+		return (NULL);
+	size = ft_strlen(str);
+	dup = (char *)malloc((size + 1) * sizeof(char));
+	if (!dup)
+		return (NULL);
+	while (i < size)
+		dup[i] = str[i++];
+	dup[size] = '\0';
+	return (dup);
+}
+
+int	ft_has_newline(const char *s)
+{
+	int	i;
+
+	i = 0;
+	if (!s)
+		return (0);
+	while (s[i])
+	{
+		if (s[i] == '\n')
+			return (1);
+		i++;
+	}
+	return (0);
 }
