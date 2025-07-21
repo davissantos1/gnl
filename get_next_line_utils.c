@@ -6,7 +6,7 @@
 /*   By: dasimoes <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 22:05:03 by dasimoes          #+#    #+#             */
-/*   Updated: 2025/07/19 16:08:02 by dasimoes         ###   ########.fr       */
+/*   Updated: 2025/07/20 20:57:25 by dasimoes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	*ft_strdup(char *str)
 	return (dup);
 }
 
-int	ft_has_newline(const char *s)
+int	ft_indexof(const char *s, int c)
 {
 	int	i;
 
@@ -77,9 +77,9 @@ int	ft_has_newline(const char *s)
 		return (0);
 	while (s[i])
 	{
-		if (s[i] == '\n')
-			return (1);
+		if (s[i] == c)
+			return (i);
 		i++;
 	}
-	return (0);
+	return (-1);
 }
