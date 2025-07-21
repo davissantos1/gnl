@@ -26,26 +26,24 @@ char	*ft_strjoin(char *s1, char *s2)
 {
 	int		i;
 	int		j;
-	int		size;
 	char	*result;
 
-	i = 0;
-	j = 0;
+	i = -1;
+	j = -1;
 	if (!s1 && !s2)
 		return (NULL);
 	if (!s1)
 		return (ft_strdup(s2));
 	if (!s2)
 		return (ft_strdup(s1));
-	size = (ft_strlen(s1) + ft_strlen(s2) + 1);
-	result = (char *)malloc(size * sizeof(char));
+	result = malloc(ft_strlen(s1) + ft_strlen(s2) + 1 * sizeof(char));
 	if (!result)
 		return (NULL);
-	while (s1[i])
-		result[i] = s1[i++];
-	while (s2[j])
-		result[i + j] = s2[j++];
-	result[size - 1] = '\0';
+	while (s1[++i])
+		result[i] = s1[i];
+	while (s2[++j])
+		result[i + j] = s2[j];
+	result[i + j] = '\0';
 	return (result);
 }
 
@@ -63,7 +61,10 @@ char	*ft_strdup(char *str)
 	if (!dup)
 		return (NULL);
 	while (i < size)
-		dup[i] = str[i++];
+	{
+		dup[i] = str[i];
+		i++;
+	}
 	dup[size] = '\0';
 	return (dup);
 }
@@ -74,7 +75,7 @@ int	ft_indexof(const char *s, int c)
 
 	i = 0;
 	if (!s)
-		return (0);
+		return (-1);
 	while (s[i])
 	{
 		if (s[i] == c)
@@ -82,4 +83,12 @@ int	ft_indexof(const char *s, int c)
 		i++;
 	}
 	return (-1);
+}
+
+void	*ft_free(void *ptr)
+{
+	if (ptr)
+		free(ptr);
+	ptr = NULL;
+	return (NULL);
 }

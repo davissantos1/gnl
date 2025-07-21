@@ -15,7 +15,7 @@
 
 // External includes
 # include <stdlib.h>
-# include <fcntl.h>
+# include <unistd.h>
 
 // Macro default definition
 # ifndef BUFFER_SIZE
@@ -25,9 +25,9 @@
 // Function prototypes
 char	*get_next_line(int fd);
 int		ft_strlen(char *str);
-int		ft_has_newline(const char *s);
 char	*ft_strdup(char *str);
 char	*ft_strjoin(char *s1, char *s2);
 int		ft_indexof(const char *s, int c);
+void	*ft_free(void *ptr);
 
 #endif

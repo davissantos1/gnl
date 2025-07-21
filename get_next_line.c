@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-char	*ft_extract_line(char *buffer)
+static char	*ft_extract_line(char *buffer)
 {
 	int		i;
 	int		size;
@@ -30,12 +30,15 @@ char	*ft_extract_line(char *buffer)
 	if (!new_line)
 		return (NULL);
 	while (i < size)
-		new_line[i] = buffer[i++];
+	{
+		new_line[i] = buffer[i];
+		i++;
+	}
 	new_line[i] = '\0';
 	return (new_line);
 }
 
-char	*ft_extract_leftover(char *buffer)
+static char	*ft_extract_leftover(char *buffer)
 {
 	char	*left;
 	int		i;
@@ -60,51 +63,52 @@ char	*ft_extract_leftover(char *buffer)
 	return (left);
 }
 
-char	*get_next_line_aux(int fd, char **buffer, char *line, char *left)
+static char	*get_next_line_aux(int fd, char *line)
 {
+	char	buffer[BUFFER_SIZE + 1];
 	char	*tmp;
-	int		bytes;
+	int	bytes;
 	char	*next;
 
-	if (left)
-	{
-		line = ft_strdup(left);
-		free(left);
-		left = NULL;
-	}
 	next = line;
-	bytes = read(fd, *buffer, BUFFER_SIZE);
-	while ((ft_indexof(*buffer, '\n') == -1) && (bytes > 0))
+	bytes = 1;
+	while ((ft_indexof(next, '\n') == -1) && (bytes > 0))
 	{
-		(*buffer)[bytes] = '\0';
-		tmp = ft_strjoin(next, *buffer);
-		free(next);
+		bytes = read(fd, buffer, BUFFER_SIZE);
+		if (bytes < 0)
+			return (NULL);
+		buffer[bytes] = '\0';
+		tmp = ft_strjoin(next, buffer);
+		if (!tmp)
+			return (ft_free(next));
+		ft_free(next);
 		next = tmp;
-		bytes = read(fd, *buffer, BUFFER_SIZE);
 	}
+	if (bytes < 0)
+		return (NULL);
 	return (next);
 }
 
 char	*get_next_line(int fd)
 {
 	static char	*left;
-	char		buffer[BUFFER_SIZE + 1];
 	char		*line;
 	char		*tmp;
 
 	line = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	line = get_next_line_aux(fd, &buffer, line, left);
+	if (left)
+	{
+		line = ft_strdup(left);
+		ft_free(left);
+	}
+	line = get_next_line_aux(fd, line);
 	tmp = line;
 	left = ft_extract_leftover(tmp);
 	line = ft_extract_line(tmp);
-	free(tmp);
+	ft_free(tmp);
 	if (!line || !*line)
-	{
-		free(left);
-		left = NULL;
-		return (NULL);
-	}
+		return (ft_free(left));
 	return (line);
 }
