@@ -6,7 +6,7 @@
 /*   By: dasimoes <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 22:04:41 by dasimoes          #+#    #+#             */
-/*   Updated: 2025/07/20 20:59:44 by dasimoes         ###   ########.fr       */
+/*   Updated: 2025/07/21 18:01:53 by dasimoes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,17 @@ static char	*ft_extract_leftover(char *buffer)
 	return (left);
 }
 
-static char	*get_next_line_aux(int fd, char *line)
+static char	*get_next_line_aux(int fd, char *line, int bytes)
 {
-	char	buffer[BUFFER_SIZE + 1];
+	char	*buffer;
 	char	*tmp;
-	int	bytes;
 	char	*next;
 
 	next = line;
-	bytes = 1;
-	while ((ft_indexof(next, '\n') == -1) && (bytes > 0))
+	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer)
+		return (NULL);
+	while ((bytes > 0 && ft_indexof(next, '\n') == -1))
 	{
 		bytes = read(fd, buffer, BUFFER_SIZE);
 		if (bytes < 0)
@@ -84,6 +85,7 @@ static char	*get_next_line_aux(int fd, char *line)
 		next = ft_free(next);
 		next = tmp;
 	}
+	buffer = ft_free(buffer);
 	if (bytes < 0)
 		return (NULL);
 	return (next);
@@ -94,7 +96,9 @@ char	*get_next_line(int fd)
 	static char	*left;
 	char		*line;
 	char		*tmp;
+	int			bytes;
 
+	bytes = 1;
 	line = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -103,7 +107,7 @@ char	*get_next_line(int fd)
 		line = ft_strdup(left);
 		left = ft_free(left);
 	}
-	line = get_next_line_aux(fd, line);
+	line = get_next_line_aux(fd, line, bytes);
 	tmp = line;
 	left = ft_extract_leftover(tmp);
 	line = ft_extract_line(tmp);
