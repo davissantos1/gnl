@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dasimoes <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dasimoes <dasimoes@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 22:04:41 by dasimoes          #+#    #+#             */
-/*   Updated: 2025/07/21 18:01:53 by dasimoes         ###   ########.fr       */
+/*   Updated: 2025/07/21 18:58:57 by dasimoes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,17 +77,18 @@ static char	*get_next_line_aux(int fd, char *line, int bytes)
 	{
 		bytes = read(fd, buffer, BUFFER_SIZE);
 		if (bytes < 0)
-			return (NULL);
+			return (ft_free(buffer));
 		buffer[bytes] = '\0';
 		tmp = ft_strjoin(next, buffer);
 		if (!tmp)
+		{
+			buffer = ft_free(buffer);
 			return (ft_free(next));
+		}
 		next = ft_free(next);
 		next = tmp;
 	}
 	buffer = ft_free(buffer);
-	if (bytes < 0)
-		return (NULL);
 	return (next);
 }
 
