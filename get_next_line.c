@@ -81,7 +81,7 @@ static char	*get_next_line_aux(int fd, char *line)
 		tmp = ft_strjoin(next, buffer);
 		if (!tmp)
 			return (ft_free(next));
-		ft_free(next);
+		next = ft_free(next);
 		next = tmp;
 	}
 	if (bytes < 0)
@@ -101,13 +101,13 @@ char	*get_next_line(int fd)
 	if (left)
 	{
 		line = ft_strdup(left);
-		ft_free(left);
+		left = ft_free(left);
 	}
 	line = get_next_line_aux(fd, line);
 	tmp = line;
 	left = ft_extract_leftover(tmp);
 	line = ft_extract_line(tmp);
-	ft_free(tmp);
+	tmp = ft_free(tmp);
 	if (!line || !*line)
 		return (ft_free(left));
 	return (line);
